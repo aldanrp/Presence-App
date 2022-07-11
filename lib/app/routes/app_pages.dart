@@ -4,6 +4,8 @@ import 'package:presence/app/modules/home/bindings/home_binding.dart';
 import 'package:presence/app/modules/home/views/home_view.dart';
 import 'package:presence/app/modules/login/bindings/login_binding.dart';
 import 'package:presence/app/modules/login/views/login_view.dart';
+import 'package:presence/app/modules/newPassword/bindings/new_password_binding.dart';
+import 'package:presence/app/modules/newPassword/views/new_password_view.dart';
 import 'package:presence/app/modules/register/bindings/register_binding.dart';
 import 'package:presence/app/modules/register/views/register_view.dart';
 
@@ -29,6 +31,11 @@ class AppPages {
       name: _Paths.LOGIN,
       page: () => LoginView(),
       binding: LoginBinding(),
+    ),
+    GetPage(
+      name: _Paths.NEW_PASSWORD,
+      page: () => NewPasswordView(),
+      binding: NewPasswordBinding(),
     ),
   ];
 }
