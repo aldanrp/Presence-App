@@ -17,6 +17,7 @@ class LoginView extends GetView<LoginController> {
         padding: EdgeInsets.all(20),
         children: [
           TextField(
+            autocorrect: false,
             controller: controller.emailC,
             decoration: InputDecoration(
               labelText: "Email",
@@ -26,6 +27,7 @@ class LoginView extends GetView<LoginController> {
           SizedBox(height: 20),
           Obx(
             () => TextField(
+              autocorrect: false,
               controller: controller.passC,
               obscureText: controller.isObscure.value,
               decoration: InputDecoration(
