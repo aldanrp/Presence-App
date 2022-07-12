@@ -18,7 +18,7 @@ class NewPasswordView extends GetView<NewPasswordController> {
           Obx(
             () => TextField(
               autocorrect: false,
-              // controller: controller.passC,
+              controller: controller.newPassC,
               obscureText: controller.isObscure.value,
               decoration: InputDecoration(
                 suffixIcon: IconButton(
@@ -38,7 +38,9 @@ class NewPasswordView extends GetView<NewPasswordController> {
             height: 15,
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              controller.newPassword();
+            },
             child: Text("Change Password"),
           ),
         ],
