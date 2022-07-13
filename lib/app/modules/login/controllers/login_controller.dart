@@ -20,12 +20,15 @@ class LoginController extends GetxController {
           password: passC.text,
         );
 
+        print(credential.user!.uid);
+
         print(credential);
         if (credential.user != null) {
           if (credential.user!.emailVerified == true) {
             if (passC.text == "123456") {
               Get.offAllNamed(Routes.NEW_PASSWORD);
             } else {
+              print(passC.text);
               Get.offAllNamed(Routes.HOME);
             }
           } else {
