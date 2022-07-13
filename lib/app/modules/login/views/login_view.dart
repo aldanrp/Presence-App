@@ -47,15 +47,36 @@ class LoginView extends GetView<LoginController> {
           SizedBox(
             height: 20,
           ),
-          ElevatedButton(
-            onPressed: () {
-              controller.Login();
-            },
-            child: Text(
-              "Login",
-              style: TextStyle(
-                letterSpacing: 1.5,
-              ),
+          Obx(
+            () => ElevatedButton(
+              onPressed: () async {
+                if (controller.isLoading.isFalse) {
+                  await controller.Login();
+                }
+              },
+              child: controller.isLoading.isFalse
+                  ? Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      child: Text(
+                        "Login",
+                        style: TextStyle(
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.white,
+                        color: Colors.blueAccent,
+                      ),
+                    ),
             ),
           ),
           SizedBox(

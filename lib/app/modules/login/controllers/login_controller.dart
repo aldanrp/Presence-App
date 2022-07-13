@@ -7,10 +7,13 @@ class LoginController extends GetxController {
   TextEditingController emailC = TextEditingController();
   TextEditingController passC = TextEditingController();
 
+  RxBool isLoading = false.obs;
   var isObscure = true.obs;
 
   FirebaseAuth auth = FirebaseAuth.instance;
-  void Login() async {
+
+  Future<void> Login() async {
+    isLoading.value = true;
     //check value is null or not
     if (emailC.text.isNotEmpty && passC.text.isNotEmpty) {
       // code to firebase
@@ -25,6 +28,7 @@ class LoginController extends GetxController {
         print(credential);
         if (credential.user != null) {
           if (credential.user!.emailVerified == true) {
+            isLoading.value = false;
             if (passC.text == "123456") {
               Get.offAllNamed(Routes.NEW_PASSWORD);
             } else {
@@ -36,68 +40,78 @@ class LoginController extends GetxController {
               title: "Belum di verifikasi",
               middleText:
                   "Kamu belum verifikasi akun ini. Lakukan verifikasi pada email kamu.",
+              barrierDismissible: false,
               actions: [
                 OutlinedButton(
                   onPressed: () {
+                    isLoading.value = false;
                     Get.back(); //untuk menutup dialog
                   },
                   child: Text("Cancel"),
                 ),
                 ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        await credential.user!.sendEmailVerification();
-                        Get.back(); //untuk menutup dialog
-                        Get.snackbar(
-                          "",
-                          "",
-                          backgroundColor: Colors.green,
-                          titleText: Text(
-                            "Berhasil",
-                            style: TextStyle(
-                              fontSize: 18,
-                              letterSpacing: 1,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
+                  onPressed: () async {
+                    try {
+                      await credential.user!.sendEmailVerification();
+                      Get.back(); //untuk menutup dialog
+                      Get.snackbar(
+                        "",
+                        "",
+                        backgroundColor: Colors.green,
+                        titleText: Text(
+                          "Berhasil",
+                          style: TextStyle(
+                            fontSize: 18,
+                            letterSpacing: 1,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
-                          messageText: Text(
-                            "Email Verifikasi telah dikirimkan",
-                            style: TextStyle(
-                              fontSize: 15,
-                              letterSpacing: 1.5,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                            ),
+                        ),
+                        messageText: Text(
+                          "Email Verifikasi telah dikirimkan",
+                          style: TextStyle(
+                            fontSize: 15,
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
                           ),
-                        );
-                      } catch (e) {
-                        Get.back();
-                        Get.snackbar(
-                          "",
-                          "",
-                          backgroundColor: Colors.redAccent,
-                          titleText: Text(
-                            "Terjadi Kesalahan",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                        ),
+                      );
+                      isLoading.value = false;
+                    } catch (e) {
+                      isLoading.value = false;
+                      Get.back();
+                      Get.snackbar(
+                        "",
+                        "",
+                        backgroundColor: Colors.redAccent,
+                        titleText: Text(
+                          "Terjadi Kesalahan",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                          messageText: Text(
-                            "Tidak dapat mengirim email harap hubungin admin.",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
+                        ),
+                        messageText: Text(
+                          "Tidak dapat mengirim email harap hubungin admin.",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
                           ),
-                        );
-                      }
-                    },
-                    child: Text("Kirim Ulang"))
+                        ),
+                      );
+                    }
+                  },
+                  child: Text("Kirim Ulang"),
+                ),
               ],
+              onWillPop: () async {
+                isLoading.value = false;
+                Get.back();
+                return true;
+              },
             );
           }
         }

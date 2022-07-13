@@ -13,7 +13,7 @@ class RegisterController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  void prosesAddPegawai() async {
+  Future<void> prosesAddPegawai() async {
     print("add pegawai");
     try {
       String emailAdmin = auth.currentUser!.email!;
@@ -118,8 +118,9 @@ class RegisterController extends GetxController {
               child: Text("CANCEL"),
             ),
             ElevatedButton(
-                onPressed: () {
-                  prosesAddPegawai();
+                onPressed: () async {
+                  Get.back();
+                  await prosesAddPegawai();
                 },
                 child: Text("ADD PEGAWAI"))
           ],
